@@ -60,7 +60,7 @@ jobs:
                   - .env
                 extra_hosts:
                   - "host.docker.internal:host-gateway"
-                command: sh -c "bunx prisma migrate deploy && bun run start"
+                command: sh -c "bunx prisma migrate deploy && bun run db:seed && bun run start"
             COMPOSE
             test -f .env
             docker compose pull

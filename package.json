@@ -8,7 +8,11 @@
     "start": "next start --port 3004",
     "lint": "eslint",
     "test": "jest",
+    "db:seed": "bun prisma/seed.ts",
     "test:watch": "jest --watch"
+  },
+  "prisma": {
+    "seed": "bun prisma/seed.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",

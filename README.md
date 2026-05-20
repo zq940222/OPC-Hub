@@ -32,7 +32,17 @@ bun run test -- --runInBand
 bun run build
 bunx prisma validate
 bunx prisma generate
+bun run db:seed
 ```
+
+## Seed Admin
+
+The seed script creates or updates the default admin account:
+
+- Email: `229230041@qq.com`
+- Password: `admin123`
+
+Override with `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD`, and `SEED_ADMIN_NAME` in the runtime environment when needed.
 
 ## Routes
 
