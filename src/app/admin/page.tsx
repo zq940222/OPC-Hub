@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createSubAdmin, logoutAdmin } from "@/actions/admin-auth";
+import { approveOrder, rejectOrder } from "@/actions/admin-orders";
 import { CreateSubAdminForm } from "@/components/auth/CreateSubAdminForm";
 import { getAdminSession } from "@/lib/admin-session";
 import { db } from "@/lib/db";
@@ -8,12 +9,27 @@ export default async function AdminPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
 
-  const [userCount, orderCount, admins] = await Promise.all([
+  const [userCount, orderCount, pendingOrderCount, admins, pendingOrders] = await Promise.all([
     db.user.count(),
     db.order.count(),
+    db.order.count({ where: { status: "PENDING_REVIEW" } }),
     db.admin.findMany({
       include: { subAccount: true },
       orderBy: { createdAt: "desc" },
+    }),
+    db.order.findMany({
+      where: { status: "PENDING_REVIEW" },
+      include: {
+        author: {
+          select: {
+            name: true,
+            email: true,
+            phone: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 10,
     }),
   ]);
 
@@ -45,13 +61,78 @@ export default async function AdminPage() {
           <p className="mt-2 text-3xl font-semibold text-slate-950">{userCount}</p>
         </div>
         <div className="rounded-lg border border-slate-200 bg-white p-5">
-          <p className="text-sm text-slate-500">订单总数</p>
-          <p className="mt-2 text-3xl font-semibold text-slate-950">{orderCount}</p>
+          <p className="text-sm text-slate-500">待审核订单</p>
+          <p className="mt-2 text-3xl font-semibold text-slate-950">{pendingOrderCount}</p>
+          <p className="mt-2 text-xs text-slate-500">订单总数：{orderCount}</p>
         </div>
         <div className="rounded-lg border border-slate-200 bg-white p-5">
           <p className="text-sm text-slate-500">后台账号</p>
           <p className="mt-2 text-3xl font-semibold text-slate-950">{admins.length}</p>
         </div>
+      </section>
+
+      <section className="rounded-lg border border-slate-200 bg-white p-5">
+        <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-950">订单审核</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              公司发布的订单进入待审核状态后，可由后台管理员审核。通过后进入招募，驳回时需填写原因。
+            </p>
+          </div>
+          <span className="text-sm text-slate-500">待处理 {pendingOrderCount} 单</span>
+        </div>
+
+        {pendingOrders.length === 0 ? (
+          <div className="mt-5 rounded-md border border-dashed border-slate-300 p-6 text-sm text-slate-500">
+            暂无待审核订单。
+          </div>
+        ) : (
+          <div className="mt-5 grid gap-4">
+            {pendingOrders.map((order) => (
+              <article key={order.id} className="rounded-lg border border-slate-200 p-4">
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-base font-semibold text-slate-950">{order.title}</h3>
+                      <span className="rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700">
+                        待审核
+                      </span>
+                    </div>
+                    <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{order.description}</p>
+                    <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-500">
+                      <span>发布方：{order.author.name ?? order.author.email ?? order.author.phone ?? "未命名公司"}</span>
+                      <span>分类：{order.category}</span>
+                      <span>金额：￥{Number(order.amount).toLocaleString("zh-CN")}</span>
+                      <span>发布时间：{order.createdAt.toLocaleDateString("zh-CN")}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid w-full gap-2 lg:w-80">
+                    <form action={approveOrder}>
+                      <input type="hidden" name="orderId" value={order.id} />
+                      <button className="focus-ring h-10 w-full rounded-md bg-emerald-700 text-sm font-semibold text-white hover:bg-emerald-800">
+                        审核通过
+                      </button>
+                    </form>
+                    <form action={rejectOrder} className="grid gap-2">
+                      <input type="hidden" name="orderId" value={order.id} />
+                      <textarea
+                        name="rejectReason"
+                        rows={2}
+                        className="focus-ring resize-none rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-950"
+                        placeholder="填写驳回原因"
+                        required
+                      />
+                      <button className="focus-ring h-10 rounded-md border border-red-300 text-sm font-semibold text-red-700 hover:bg-red-50">
+                        驳回订单
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="grid gap-5 lg:grid-cols-[1fr_360px]">
