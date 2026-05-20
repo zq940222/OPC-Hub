@@ -28,8 +28,9 @@ export function AppChrome({
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const isScreen = pathname === "/screen";
+  const isAdmin = pathname.startsWith("/admin");
 
-  if (isScreen) return <>{children}</>;
+  if (isScreen || isAdmin) return <>{children}</>;
 
   return (
     <div className="min-h-screen">
