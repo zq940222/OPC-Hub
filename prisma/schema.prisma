@@ -1,0 +1,215 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  OPC
+  BIZ_OPC
+  ADMIN
+}
+
+enum OrderStatus {
+  DRAFT
+  PENDING_REVIEW
+  RECRUITING
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+  CLOSED
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  phone         String?   @unique
+  email         String?   @unique
+  emailVerified DateTime?
+  password      String?
+  name          String?
+  image         String?
+  role          Role      @default(OPC)
+  points        Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts           Account[]
+  sessions           Session[]
+  orders             Order[]
+  applications       OrderApplication[]
+  posts              Post[]
+  comments           Comment[]
+  sentMessages       Message[]         @relation("SentMessages")
+  receivedMessages   Message[]         @relation("ReceivedMessages")
+  pointLogs          PointLog[]
+  subAccount         AdminSubAccount?  @relation("SubAccountUser")
+  createdSubAccounts AdminSubAccount[] @relation("SubAccountCreator")
+  following          Follow[]          @relation("Following")
+  followers          Follow[]          @relation("Followers")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model SmsCode {
+  id        String   @id @default(cuid())
+  phone     String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([phone])
+}
+
+model Order {
+  id           String      @id @default(cuid())
+  title        String
+  description  String      @db.Text
+  amount       Decimal     @db.Decimal(12, 2)
+  category     String
+  status       OrderStatus @default(DRAFT)
+  deadline     DateTime?
+  authorId     String
+  rejectReason String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  author       User               @relation(fields: [authorId], references: [id])
+  applications OrderApplication[]
+}
+
+model OrderApplication {
+  id          String            @id @default(cuid())
+  orderId     String
+  applicantId String
+  reason      String            @db.Text
+  status      ApplicationStatus @default(PENDING)
+  createdAt   DateTime          @default(now())
+
+  order     Order @relation(fields: [orderId], references: [id])
+  applicant User  @relation(fields: [applicantId], references: [id])
+
+  @@unique([orderId, applicantId])
+}
+
+model Board {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique
+  order Int    @default(0)
+  posts Post[]
+}
+
+model Post {
+  id         String   @id @default(cuid())
+  title      String
+  content    String   @db.Text
+  boardId    String
+  authorId   String
+  isPinned   Boolean  @default(false)
+  isFeatured Boolean  @default(false)
+  viewCount  Int      @default(0)
+  likeCount  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  board    Board     @relation(fields: [boardId], references: [id])
+  author   User      @relation(fields: [authorId], references: [id])
+  comments Comment[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  authorId  String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  post   Post @relation(fields: [postId], references: [id])
+  author User @relation(fields: [authorId], references: [id])
+}
+
+model Message {
+  id        String    @id @default(cuid())
+  fromId    String
+  toId      String
+  content   String    @db.Text
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  from User @relation("SentMessages", fields: [fromId], references: [id])
+  to   User @relation("ReceivedMessages", fields: [toId], references: [id])
+}
+
+model Follow {
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("Following", fields: [followerId], references: [id])
+  following User @relation("Followers", fields: [followingId], references: [id])
+
+  @@id([followerId, followingId])
+}
+
+model PointLog {
+  id        String   @id @default(cuid())
+  userId    String
+  delta     Int
+  reason    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model AdminSubAccount {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  permissions Json
+  createdById String
+  createdAt   DateTime @default(now())
+
+  user      User @relation("SubAccountUser", fields: [userId], references: [id])
+  createdBy User @relation("SubAccountCreator", fields: [createdById], references: [id])
+}

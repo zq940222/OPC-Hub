@@ -1,0 +1,15 @@
+.git
+.github
+.next
+.superpowers
+.swc
+node_modules
+.env
+.env.*
+!.env.example
+.bun-cache
+.bun-tmp
+coverage
+docs
+README.md
+tsconfig.tsbuildinfo
