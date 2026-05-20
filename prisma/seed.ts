@@ -18,12 +18,12 @@ const db = new PrismaClient({
 
 const adminEmail = process.env.SEED_ADMIN_EMAIL ?? "229230041@qq.com";
 const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? "admin123";
-const adminName = process.env.SEED_ADMIN_NAME ?? "系统管理员";
+const adminName = process.env.SEED_ADMIN_NAME ?? "System Admin";
 
 async function main() {
   const password = await bcrypt.hash(adminPassword, 12);
 
-  const admin = await db.user.upsert({
+  const admin = await db.admin.upsert({
     where: { email: adminEmail },
     update: {
       name: adminName,
@@ -38,7 +38,7 @@ async function main() {
     },
   });
 
-  console.log(`Seeded admin user: ${admin.email}`);
+  console.log(`Seeded admin account: ${admin.email}`);
 }
 
 main()

@@ -96,8 +96,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     session({ session, token }) {
       if (session.user) {
         session.user.id = typeof token.id === "string" ? token.id : "";
-        session.user.role =
-          token.role === "ADMIN" || token.role === "BIZ_OPC" || token.role === "OPC" ? token.role : "OPC";
+        session.user.role = token.role === "BIZ_OPC" || token.role === "OPC" ? token.role : "OPC";
       }
       return session;
     },

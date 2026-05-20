@@ -9,7 +9,6 @@ datasource db {
 enum Role {
   OPC
   BIZ_OPC
-  ADMIN
 }
 
 enum OrderStatus {
@@ -50,10 +49,26 @@ model User {
   sentMessages       Message[]         @relation("SentMessages")
   receivedMessages   Message[]         @relation("ReceivedMessages")
   pointLogs          PointLog[]
-  subAccount         AdminSubAccount?  @relation("SubAccountUser")
-  createdSubAccounts AdminSubAccount[] @relation("SubAccountCreator")
   following          Follow[]          @relation("Following")
   followers          Follow[]          @relation("Followers")
+}
+
+enum AdminRole {
+  ADMIN
+  SUB_ADMIN
+}
+
+model Admin {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  name      String
+  role      AdminRole @default(ADMIN)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  subAccount         AdminSubAccount?  @relation("SubAccountAdmin")
+  createdSubAccounts AdminSubAccount[] @relation("SubAccountCreator")
 }
 
 model Account {
@@ -205,11 +220,11 @@ model PointLog {
 
 model AdminSubAccount {
   id          String   @id @default(cuid())
-  userId      String   @unique
+  adminId     String   @unique
   permissions Json
   createdById String
   createdAt   DateTime @default(now())
 
-  user      User @relation("SubAccountUser", fields: [userId], references: [id])
-  createdBy User @relation("SubAccountCreator", fields: [createdById], references: [id])
+  admin     Admin @relation("SubAccountAdmin", fields: [adminId], references: [id])
+  createdBy Admin @relation("SubAccountCreator", fields: [createdById], references: [id])
 }
