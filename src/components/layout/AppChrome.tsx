@@ -4,18 +4,19 @@ import type { Session } from "next-auth";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { LogIn, LogOut, Menu, UserRound, X } from "lucide-react";
+import { LogIn, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { UserMenu } from "@/components/layout/UserMenu";
 
 const navItems = [
-  { href: "/", label: "首页" },
-  { href: "/tools", label: "工具" },
-  { href: "/finance", label: "财务" },
-  { href: "/legal", label: "法务" },
-  { href: "/banking", label: "银行服务" },
-  { href: "/equipment", label: "设备租赁" },
-  { href: "/orders", label: "订单广场" },
-  { href: "/community", label: "交流社区" },
+  { href: "/", label: "Home" },
+  { href: "/tools", label: "Tools" },
+  { href: "/finance", label: "Finance" },
+  { href: "/legal", label: "Legal" },
+  { href: "/banking", label: "Banking" },
+  { href: "/equipment", label: "Equipment" },
+  { href: "/orders", label: "Orders" },
+  { href: "/community", label: "Community" },
 ];
 
 export function AppChrome({
@@ -41,7 +42,7 @@ export function AppChrome({
             <span className="text-base font-semibold">OPC Hub</span>
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="主导航">
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Main navigation">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -57,24 +58,11 @@ export function AppChrome({
 
           <div className="hidden items-center gap-2 lg:flex">
             {user ? (
-              <>
-                <Link href="/orders" className="focus-ring rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
-                  <UserRound aria-hidden="true" className="mr-1 inline" size={16} />
-                  {user.name ?? "个人中心"}
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                  className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                >
-                  <LogOut aria-hidden="true" className="mr-1 inline" size={16} />
-                  退出
-                </button>
-              </>
+              <UserMenu user={user} />
             ) : (
               <Link href="/login" className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">
                 <LogIn aria-hidden="true" className="mr-1 inline" size={16} />
-                登录/注册
+                Login
               </Link>
             )}
           </div>
@@ -83,7 +71,7 @@ export function AppChrome({
             type="button"
             className="focus-ring rounded-md border border-slate-300 p-2 text-slate-700 lg:hidden"
             onClick={() => setOpen((value) => !value)}
-            aria-label={open ? "关闭导航" : "打开导航"}
+            aria-label={open ? "Close navigation" : "Open navigation"}
             aria-expanded={open}
           >
             {open ? <X size={20} /> : <Menu size={20} />}
@@ -92,7 +80,7 @@ export function AppChrome({
 
         {open && (
           <div className="border-t border-slate-200 bg-white lg:hidden">
-            <nav className="shell grid gap-1 py-3" aria-label="移动导航">
+            <nav className="shell grid gap-1 py-3" aria-label="Mobile navigation">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
@@ -106,16 +94,27 @@ export function AppChrome({
                 </Link>
               ))}
               {user ? (
-                <button
-                  type="button"
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                  className="mt-2 rounded-md border border-slate-300 px-3 py-3 text-left text-sm font-medium text-slate-700"
-                >
-                  退出登录
-                </button>
+                <>
+                  <Link href={`/profile/${user.id}`} onClick={() => setOpen(false)} className="rounded-md px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                    My profile
+                  </Link>
+                  <Link href="/dashboard/orders" onClick={() => setOpen(false)} className="rounded-md px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                    My orders
+                  </Link>
+                  <Link href="/settings/profile" onClick={() => setOpen(false)} className="rounded-md px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                    Account settings
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="mt-2 rounded-md border border-slate-300 px-3 py-3 text-left text-sm font-medium text-slate-700"
+                  >
+                    Sign out
+                  </button>
+                </>
               ) : (
                 <Link href="/login" onClick={() => setOpen(false)} className="mt-2 rounded-md bg-blue-700 px-3 py-3 text-sm font-semibold text-white">
-                  登录/注册
+                  Login
                 </Link>
               )}
             </nav>
@@ -127,9 +126,9 @@ export function AppChrome({
 
       <footer className="border-t border-slate-200 bg-white">
         <div className="shell flex flex-col gap-2 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
-          <span>OPC Hub · 服务、订单与社区协作平台</span>
+          <span>OPC Hub - services, orders, and community collaboration</span>
           <Link href="/screen" className="font-medium text-blue-700 hover:text-blue-900">
-            大屏展示
+            Display screen
           </Link>
         </div>
       </footer>
