@@ -1,12 +1,100 @@
-import { ModulePage, PrimaryLink } from "@/components/layout/ModulePage";
+import type { OrderStatus, Prisma } from "@prisma/client";
+import Link from "next/link";
+import { OrderCard } from "@/components/orders/OrderCard";
+import { OrderFilters } from "@/components/orders/OrderFilters";
+import { db } from "@/lib/db";
 
-export default function OrdersPage() {
+function firstParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function dateParam(value: string | string[] | undefined) {
+  const raw = firstParam(value);
+  if (!raw) return undefined;
+  const date = new Date(raw);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+}
+
+function numberParam(value: string | string[] | undefined) {
+  const raw = firstParam(value);
+  if (!raw) return undefined;
+  const number = Number(raw);
+  return Number.isNaN(number) ? undefined : number;
+}
+
+export default async function OrdersPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const status = (firstParam(params.status) || "RECRUITING") as OrderStatus;
+  const tags = Array.isArray(params.tags) ? params.tags : params.tags ? [params.tags] : [];
+  const minAmount = numberParam(params.minAmount);
+  const maxAmount = numberParam(params.maxAmount);
+  const deadlineFrom = dateParam(params.deadlineFrom);
+  const deadlineTo = dateParam(params.deadlineTo);
+
+  const where: Prisma.OrderWhereInput = {
+    status,
+    ...(firstParam(params.category) ? { category: firstParam(params.category) } : {}),
+    ...(tags.length > 0 ? { tags: { hasSome: tags } } : {}),
+    ...(minAmount !== undefined || maxAmount !== undefined
+      ? {
+          amount: {
+            ...(minAmount !== undefined ? { gte: minAmount } : {}),
+            ...(maxAmount !== undefined ? { lte: maxAmount } : {}),
+          },
+        }
+      : {}),
+    ...(deadlineFrom || deadlineTo
+      ? {
+          deadline: {
+            ...(deadlineFrom ? { gte: deadlineFrom } : {}),
+            ...(deadlineTo ? { lte: deadlineTo } : {}),
+          },
+        }
+      : {}),
+  };
+
+  const sort = firstParam(params.sort) || "newest";
+  const orderBy: Prisma.OrderOrderByWithRelationInput =
+    sort === "highest"
+      ? { amount: "desc" }
+      : sort === "fewest"
+        ? { applications: { _count: "asc" } }
+        : { createdAt: "desc" };
+
+  const orders = await db.order.findMany({
+    where,
+    include: {
+      author: { select: { id: true, name: true, image: true } },
+      _count: { select: { applications: true } },
+    },
+    orderBy,
+  });
+
   return (
-    <ModulePage
-      eyebrow="订单广场"
-      title="发现需求并报名承接"
-      description="支持按行业、金额、状态和截止日期筛选订单；本期先完成权限入口，订单 CRUD 在后续计划实现。"
-      actions={<PrimaryLink href="/orders/new">发布订单</PrimaryLink>}
-    />
+    <main className="shell grid gap-6 py-8 md:py-12">
+      <section className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:flex-row md:items-end md:justify-between md:p-8">
+        <div>
+          <p className="text-sm font-semibold text-teal-700">Order marketplace</p>
+          <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">Find and apply for work</h1>
+          <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">Browse reviewed orders by category, tags, amount, deadline, and status.</p>
+        </div>
+        <Link href="/orders/new" className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-blue-800">
+          Publish order
+        </Link>
+      </section>
+
+      <OrderFilters initial={params} />
+
+      <section className="grid gap-4">
+        {orders.map((order) => (
+          <OrderCard key={order.id} order={order} />
+        ))}
+        {orders.length === 0 ? <div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-sm text-slate-500">No orders match these filters.</div> : null}
+      </section>
+    </main>
   );
 }
