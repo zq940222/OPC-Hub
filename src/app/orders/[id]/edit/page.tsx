@@ -17,11 +17,11 @@ export default async function EditOrderPage(props: { params: Promise<{ id: strin
   return (
     <main className="shell grid gap-6 py-8 md:py-12">
       <section>
-        <p className="text-sm font-semibold text-teal-700">Edit order</p>
+        <p className="text-sm font-semibold text-teal-700">编辑订单</p>
         <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">{order.title}</h1>
-        <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">Saving changes sends the order back to pending review.</p>
+        <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">保存修改后，订单会重新进入待审核状态。</p>
       </section>
-      <OrderForm action={updateOrder.bind(null, id)} order={{ ...order, amount: order.amount.toString() }} submitLabel="Save changes" />
+      <OrderForm action={updateOrder.bind(null, id)} order={{ ...order, amount: order.amount.toString() }} submitLabel="保存修改" />
     </main>
   );
 }

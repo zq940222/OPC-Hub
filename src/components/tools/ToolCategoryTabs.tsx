@@ -16,8 +16,8 @@ type ToolCategoryTabsProps = {
 };
 
 export function ToolCategoryTabs({ categories, tools }: ToolCategoryTabsProps) {
-  const [category, setCategory] = useState(categories[0] ?? "All");
-  const filteredTools = useMemo(() => (category === "All" ? tools : tools.filter((tool) => tool.category === category)), [category, tools]);
+  const [category, setCategory] = useState(categories[0] ?? "全部");
+  const filteredTools = useMemo(() => (category === "全部" ? tools : tools.filter((tool) => tool.category === category)), [category, tools]);
 
   return (
     <section className="grid gap-5">

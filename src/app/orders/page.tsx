@@ -78,12 +78,12 @@ export default async function OrdersPage({
     <main className="shell grid gap-6 py-8 md:py-12">
       <section className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:flex-row md:items-end md:justify-between md:p-8">
         <div>
-          <p className="text-sm font-semibold text-teal-700">Order marketplace</p>
-          <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">Find and apply for work</h1>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">Browse reviewed orders by category, tags, amount, deadline, and status.</p>
+          <p className="text-sm font-semibold text-teal-700">订单广场</p>
+          <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">发现订单并报名承接</h1>
+          <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">按类目、标签、金额、截止日期和状态浏览已审核订单。</p>
         </div>
         <Link href="/orders/new" className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-blue-800">
-          Publish order
+          发布订单
         </Link>
       </section>
 
@@ -93,7 +93,7 @@ export default async function OrdersPage({
         {orders.map((order) => (
           <OrderCard key={order.id} order={order} />
         ))}
-        {orders.length === 0 ? <div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-sm text-slate-500">No orders match these filters.</div> : null}
+        {orders.length === 0 ? <div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-sm text-slate-500">没有符合筛选条件的订单。</div> : null}
       </section>
     </main>
   );

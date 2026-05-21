@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { updateProfile, type ProfileActionState } from "@/actions/profile";
+import { formatActionError } from "@/lib/action-errors";
 import { PROFILE_SKILL_LIMIT } from "@/lib/constants";
 
 type ProfileFormProps = {
@@ -23,26 +24,26 @@ export function ProfileForm({ user, profile }: ProfileFormProps) {
 
   return (
     <form action={formAction} className="grid gap-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-      {state.error ? <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p> : null}
-      {state.success ? <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">Profile saved.</p> : null}
+      {state.error ? <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{formatActionError(state.error)}</p> : null}
+      {state.success ? <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">资料已保存。</p> : null}
       <label className="grid gap-2 text-sm font-medium text-slate-700">
-        Display name
+        显示名称
         <input name="name" defaultValue={user.name ?? ""} className="focus-ring rounded-md border border-slate-300 px-3 py-2" />
       </label>
       <label className="grid gap-2 text-sm font-medium text-slate-700">
-        Avatar URL
+        头像 URL
         <input name="image" defaultValue={user.image ?? ""} className="focus-ring rounded-md border border-slate-300 px-3 py-2" />
       </label>
       <label className="grid gap-2 text-sm font-medium text-slate-700">
-        Bio
+        简介
         <textarea name="bio" maxLength={300} rows={5} defaultValue={profile?.bio ?? ""} className="focus-ring resize-y rounded-md border border-slate-300 px-3 py-2" />
       </label>
       <div className="grid gap-2 text-sm font-medium text-slate-700">
-        Skills
+        技能
         <div className="flex gap-2">
           <input value={customSkill} onChange={(event) => setCustomSkill(event.target.value)} className="focus-ring min-w-0 flex-1 rounded-md border border-slate-300 px-3 py-2" />
           <button type="button" onClick={addSkill} className="focus-ring rounded-md border border-slate-300 px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50">
-            Add
+            添加
           </button>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -59,16 +60,16 @@ export function ProfileForm({ user, profile }: ProfileFormProps) {
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         <label className="grid gap-2 text-sm font-medium text-slate-700">
-          Province / city
+          省份 / 城市
           <input name="location" defaultValue={profile?.location ?? ""} className="focus-ring rounded-md border border-slate-300 px-3 py-2" />
         </label>
         <label className="grid gap-2 text-sm font-medium text-slate-700">
-          Website
+          网站
           <input name="website" type="url" defaultValue={profile?.website ?? ""} className="focus-ring rounded-md border border-slate-300 px-3 py-2" />
         </label>
       </div>
       <button disabled={pending} className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-60">
-        {pending ? "Saving..." : "Save profile"}
+        {pending ? "保存中..." : "保存资料"}
       </button>
     </form>
   );

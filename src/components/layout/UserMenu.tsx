@@ -12,7 +12,7 @@ type UserMenuProps = {
 
 export function UserMenu({ user }: UserMenuProps) {
   const [open, setOpen] = useState(false);
-  const label = user.name ?? "Account";
+  const label = user.name ?? "账号";
 
   return (
     <div className="relative">
@@ -29,16 +29,16 @@ export function UserMenu({ user }: UserMenuProps) {
       {open ? (
         <div className="absolute right-0 mt-2 w-56 rounded-lg border border-slate-200 bg-white p-2 shadow-lg">
           <MenuLink href={`/profile/${user.id}`} icon={<UserRound size={16} />}>
-            My profile
+            我的主页
           </MenuLink>
           <MenuLink href="/dashboard/orders" icon={<ClipboardList size={16} />}>
-            My orders
+            我的订单
           </MenuLink>
           <MenuLink href="/community/messages" icon={<MessageCircle size={16} />}>
-            Messages
+            私信
           </MenuLink>
           <MenuLink href="/settings/profile" icon={<Settings size={16} />}>
-            Account settings
+            账号设置
           </MenuLink>
           <button
             type="button"
@@ -46,7 +46,7 @@ export function UserMenu({ user }: UserMenuProps) {
             className="focus-ring flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-medium text-slate-700 hover:bg-slate-50"
           >
             <LogOut size={16} aria-hidden="true" />
-            Sign out
+            退出登录
           </button>
         </div>
       ) : null}

@@ -36,13 +36,13 @@ export function ServicePage({ eyebrow, title, intro, features }: ServicePageProp
       </section>
 
       <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-950">Contact</h2>
+        <h2 className="text-lg font-semibold text-slate-950">联系方式</h2>
         <div className="mt-4 grid gap-3 text-sm text-slate-600 md:grid-cols-3">
-          <ContactItem icon={<QrCode size={18} />} label="WeChat" value={qrUrl ? "QR configured" : "Add NEXT_PUBLIC_CONTACT_WECHAT_QR_URL"} />
-          <ContactItem icon={<Phone size={18} />} label="Phone" value={phone || "Add NEXT_PUBLIC_CONTACT_PHONE"} />
-          <ContactItem icon={<Mail size={18} />} label="Email" value={email || "Add NEXT_PUBLIC_CONTACT_EMAIL"} />
+          <ContactItem icon={<QrCode size={18} />} label="微信" value={qrUrl ? "已配置二维码" : "请配置 NEXT_PUBLIC_CONTACT_WECHAT_QR_URL"} />
+          <ContactItem icon={<Phone size={18} />} label="电话" value={phone || "请配置 NEXT_PUBLIC_CONTACT_PHONE"} />
+          <ContactItem icon={<Mail size={18} />} label="邮箱" value={email || "请配置 NEXT_PUBLIC_CONTACT_EMAIL"} />
         </div>
-        {qrUrl ? <div className="mt-4 h-32 w-32 rounded-md border border-slate-200 bg-cover bg-center" style={{ backgroundImage: `url(${qrUrl})` }} aria-label="WeChat QR" /> : null}
+        {qrUrl ? <div className="mt-4 h-32 w-32 rounded-md border border-slate-200 bg-cover bg-center" style={{ backgroundImage: `url(${qrUrl})` }} aria-label="微信二维码" /> : null}
       </section>
     </main>
   );

@@ -67,17 +67,17 @@ export default async function ProfilePage(props: { params: Promise<{ userId: str
             </div>
             <div className="min-w-0">
               <h1 className="text-2xl font-semibold text-slate-950">{user.name ?? user.email ?? user.phone ?? "OPC"}</h1>
-              <p className="mt-1 text-sm text-slate-500">Joined {user.createdAt.toLocaleDateString("zh-CN")}</p>
+              <p className="mt-1 text-sm text-slate-500">加入时间 {user.createdAt.toLocaleDateString("zh-CN")}</p>
             </div>
           </div>
 
           <div className="mt-5 grid gap-2 text-sm text-slate-600">
-            <p>Location: {user.opcProfile?.location ?? "Not set"}</p>
-            <p>Points: {user.points}</p>
-            <p>Rank: #{rank}</p>
-            <p>Completed orders: {user.orders.length}</p>
+            <p>所在地：{user.opcProfile?.location ?? "未设置"}</p>
+            <p>积分：{user.points}</p>
+            <p>排名：第 {rank} 名</p>
+            <p>已完成订单：{user.orders.length}</p>
             <p>
-              Followers: {user.followers.length} / Following: {user.following.length}
+              粉丝：{user.followers.length} / 关注：{user.following.length}
             </p>
           </div>
 
@@ -92,20 +92,20 @@ export default async function ProfilePage(props: { params: Promise<{ userId: str
           {user.opcProfile?.bio ? <p className="mt-5 whitespace-pre-wrap text-sm leading-6 text-slate-700">{user.opcProfile.bio}</p> : null}
           {user.opcProfile?.website ? (
             <a href={user.opcProfile.website} target="_blank" rel="noreferrer" className="mt-4 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900">
-              Website
+              网站
             </a>
           ) : null}
 
           <div className="mt-5 flex flex-wrap gap-2">
             {isSelf ? (
               <Link href="/settings/profile" className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">
-                Edit profile
+                编辑资料
               </Link>
             ) : viewerId ? (
               <FollowButton userId={user.id} initialFollowing={Boolean(viewerFollow)} />
             ) : (
               <Link href="/login" className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">
-                Login to follow
+                登录后关注
               </Link>
             )}
           </div>

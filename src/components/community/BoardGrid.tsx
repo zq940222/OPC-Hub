@@ -15,7 +15,7 @@ export function BoardGrid({ boards }: BoardGridProps) {
       {boards.map((board) => (
         <Link key={board.id} href={`/community/${board.slug}`} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm hover:border-blue-200">
           <p className="text-lg font-semibold text-slate-950">{board.name}</p>
-          <p className="mt-2 text-sm text-slate-500">{board._count.posts} posts</p>
+          <p className="mt-2 text-sm text-slate-500">{board._count.posts} 篇帖子</p>
         </Link>
       ))}
     </section>

@@ -18,14 +18,18 @@ type OrderCardProps = {
 };
 
 const statusLabels: Record<OrderStatus, string> = {
-  DRAFT: "Draft",
-  PENDING_REVIEW: "Pending review",
-  RECRUITING: "Recruiting",
-  IN_PROGRESS: "In progress",
-  COMPLETED: "Completed",
-  REJECTED: "Rejected",
-  CLOSED: "Closed",
+  DRAFT: "草稿",
+  PENDING_REVIEW: "待审核",
+  RECRUITING: "招募中",
+  IN_PROGRESS: "进行中",
+  COMPLETED: "已完成",
+  REJECTED: "已驳回",
+  CLOSED: "已关闭",
 };
+
+export function formatOrderStatus(status: OrderStatus | string) {
+  return statusLabels[status as OrderStatus] ?? status;
+}
 
 export function formatAmount(amount: unknown) {
   return Number(amount).toLocaleString("zh-CN", {
@@ -44,7 +48,7 @@ export function OrderCard({ order }: OrderCardProps) {
             <Link href={`/orders/${order.id}`} className="text-lg font-semibold text-slate-950 hover:text-blue-700">
               {order.title}
             </Link>
-            <span className="rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">{statusLabels[order.status]}</span>
+            <span className="rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">{formatOrderStatus(order.status)}</span>
           </div>
           <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{order.description}</p>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -56,8 +60,8 @@ export function OrderCard({ order }: OrderCardProps) {
           </div>
           <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-500">
             <span>{order.category}</span>
-            <span>{order._count?.applications ?? 0} applications</span>
-            <span>deadline {order.deadline ? order.deadline.toLocaleDateString("zh-CN") : "open"}</span>
+            <span>{order._count?.applications ?? 0} 人报名</span>
+            <span>截止 {order.deadline ? order.deadline.toLocaleDateString("zh-CN") : "长期有效"}</span>
             <Link href={`/profile/${order.author.id}`} className="font-medium text-blue-700 hover:text-blue-900">
               {order.author.name ?? "OPC"}
             </Link>
@@ -67,7 +71,7 @@ export function OrderCard({ order }: OrderCardProps) {
           <p className="text-2xl font-semibold text-slate-950">{formatAmount(order.amount)}</p>
           <p className="mt-2 text-xs text-slate-500">{order.createdAt.toLocaleDateString("zh-CN")}</p>
           <Link href={`/orders/${order.id}`} className="mt-4 inline-flex rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">
-            View detail
+            查看详情
           </Link>
         </div>
       </div>

@@ -28,7 +28,7 @@ export function FollowButton({ userId, initialFollowing }: FollowButtonProps) {
       className="focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-60"
     >
       {following ? <UserCheck size={16} aria-hidden="true" /> : <UserPlus size={16} aria-hidden="true" />}
-      {following ? "Following" : "Follow"}
+      {following ? "已关注" : "关注"}
     </button>
   );
 }

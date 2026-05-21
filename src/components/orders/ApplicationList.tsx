@@ -1,5 +1,11 @@
 import { acceptApplication, rejectApplication } from "@/actions/applications";
 
+const applicationStatusLabels: Record<string, string> = {
+  PENDING: "待处理",
+  ACCEPTED: "已接受",
+  REJECTED: "已拒绝",
+};
+
 type ApplicationListProps = {
   applications: Array<{
     id: string;
@@ -22,7 +28,7 @@ export function ApplicationList({ applications }: ApplicationListProps) {
   }
 
   if (applications.length === 0) {
-    return <div className="rounded-lg border border-dashed border-slate-300 p-5 text-sm text-slate-500">No applications yet.</div>;
+    return <div className="rounded-lg border border-dashed border-slate-300 p-5 text-sm text-slate-500">暂无报名。</div>;
   }
 
   return (
@@ -34,18 +40,18 @@ export function ApplicationList({ applications }: ApplicationListProps) {
               <p className="font-semibold text-slate-950">{application.applicant.name ?? application.applicant.email ?? application.applicant.phone ?? "OPC"}</p>
               <p className="mt-2 text-sm leading-6 text-slate-600">{application.reason}</p>
               <p className="mt-2 text-xs text-slate-500">
-                {application.status} / {application.createdAt.toLocaleDateString("zh-CN")}
+                {applicationStatusLabels[application.status] ?? application.status} / {application.createdAt.toLocaleDateString("zh-CN")}
               </p>
             </div>
             {application.status === "PENDING" ? (
               <div className="flex gap-2">
                 <form action={acceptAction}>
                   <input type="hidden" name="applicationId" value={application.id} />
-                  <button className="focus-ring rounded-md bg-emerald-700 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-800">Accept</button>
+                  <button className="focus-ring rounded-md bg-emerald-700 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-800">接受</button>
                 </form>
                 <form action={rejectAction}>
                   <input type="hidden" name="applicationId" value={application.id} />
-                  <button className="focus-ring rounded-md border border-red-300 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-50">Reject</button>
+                  <button className="focus-ring rounded-md border border-red-300 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-50">拒绝</button>
                 </form>
               </div>
             ) : null}

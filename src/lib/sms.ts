@@ -38,7 +38,7 @@ function requireTencentSmsConfig() {
     .map(([key]) => key);
 
   if (missing.length > 0) {
-    throw new Error(`Missing Tencent Cloud SMS config: ${missing.join(", ")}`);
+    throw new Error(`缺少腾讯云短信配置：${missing.join(", ")}`);
   }
 
   return config as Record<keyof typeof config, string>;

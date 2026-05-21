@@ -7,7 +7,7 @@ import { requireAdminPermission } from "@/actions/admin-shared";
 async function requireAdminReviewer() {
   const auth = await requireAdminPermission("orders");
   if ("error" in auth) {
-    throw new Error("Unauthorized");
+    throw new Error("未授权");
   }
   return auth.admin;
 }

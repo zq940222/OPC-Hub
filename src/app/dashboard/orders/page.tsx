@@ -52,8 +52,8 @@ export default async function DashboardOrdersPage() {
   return (
     <main className="shell grid gap-6 py-8 md:py-12">
       <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:p-8">
-        <p className="text-sm font-semibold text-teal-700">My orders</p>
-        <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">Published and applied orders</h1>
+        <p className="text-sm font-semibold text-teal-700">我的订单</p>
+        <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">发布与报名记录</h1>
       </section>
       <MyOrdersTabs authoredOrders={authoredOrderItems} applications={applicationItems} />
     </main>

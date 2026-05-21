@@ -36,8 +36,8 @@ export default async function MessagesPage() {
   return (
     <main className="shell grid gap-6 py-8 md:py-12">
       <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:p-8">
-        <p className="text-sm font-semibold text-teal-700">Messages</p>
-        <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">Private conversations</h1>
+        <p className="text-sm font-semibold text-teal-700">私信</p>
+        <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">私密对话</h1>
       </section>
       <section className="grid gap-3">
         {Array.from(conversations.values()).map((conversation) => (
@@ -52,7 +52,7 @@ export default async function MessagesPage() {
             <p className="mt-2 line-clamp-1 text-sm text-slate-500">{conversation.preview}</p>
           </Link>
         ))}
-        {conversations.size === 0 ? <p className="rounded-lg border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-500">No messages yet.</p> : null}
+        {conversations.size === 0 ? <p className="rounded-lg border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-500">暂无私信。</p> : null}
       </section>
     </main>
   );

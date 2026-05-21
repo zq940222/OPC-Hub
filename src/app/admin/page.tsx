@@ -99,68 +99,68 @@ export default async function AdminPage({
       <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:p-8">
         <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-sm font-semibold text-teal-700">Admin</p>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">OPC Hub management</h1>
+            <p className="text-sm font-semibold text-teal-700">后台管理</p>
+            <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">OPC Hub 管理台</h1>
             <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
-              Manage users, order review, reports, tools, and backend accounts from one page.
+              在一个页面管理用户、订单审核、举报、工具和后台账号。
             </p>
             <p className="mt-3 text-sm text-slate-500">
-              Logged in as {session.name} ({session.role})
+              当前登录：{session.name}（{session.role}）
             </p>
           </div>
           <form action={logoutAdmin}>
             <button className="focus-ring rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
-              Sign out
+              退出登录
             </button>
           </form>
         </div>
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
-        <StatCard label="Frontend users" value={userCount} />
-        <StatCard label="Pending orders" value={pendingOrderCount} helper={`Total orders: ${orderCount}`} />
-        <StatCard label="Admin accounts" value={admins.length} />
+        <StatCard label="前台用户" value={userCount} />
+        <StatCard label="待审核订单" value={pendingOrderCount} helper={`订单总数：${orderCount}`} />
+        <StatCard label="后台账号" value={admins.length} />
       </section>
 
-      <Section title="User management">
+      <Section title="用户管理">
         <form className="mb-4 flex flex-col gap-2 sm:flex-row">
-          <input name="q" defaultValue={q} placeholder="Search name, email, phone" className="focus-ring min-w-0 flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm" />
-          <button className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">Search</button>
+          <input name="q" defaultValue={q} placeholder="搜索姓名、邮箱、手机号" className="focus-ring min-w-0 flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm" />
+          <button className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">搜索</button>
         </form>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] text-left text-sm">
             <thead className="border-b border-slate-200 text-slate-500">
               <tr>
-                <th className="py-3 pr-4 font-medium">User</th>
-                <th className="py-3 pr-4 font-medium">Role</th>
-                <th className="py-3 pr-4 font-medium">Points</th>
-                <th className="py-3 pr-4 font-medium">Status</th>
-                <th className="py-3 pr-4 font-medium">Actions</th>
+                <th className="py-3 pr-4 font-medium">用户</th>
+                <th className="py-3 pr-4 font-medium">角色</th>
+                <th className="py-3 pr-4 font-medium">积分</th>
+                <th className="py-3 pr-4 font-medium">状态</th>
+                <th className="py-3 pr-4 font-medium">操作</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {users.map((user) => (
                 <tr key={user.id}>
                   <td className="py-3 pr-4">
-                    <p className="font-medium text-slate-950">{user.name ?? "Unnamed"}</p>
+                    <p className="font-medium text-slate-950">{user.name ?? "未命名用户"}</p>
                     <p className="text-xs text-slate-500">{user.email ?? user.phone ?? user.id}</p>
                   </td>
                   <td className="py-3 pr-4 text-slate-600">{user.role}</td>
                   <td className="py-3 pr-4 text-slate-600">{user.points}</td>
-                  <td className="py-3 pr-4 text-slate-600">{user.banned ? "Banned" : "Active"}</td>
+                  <td className="py-3 pr-4 text-slate-600">{user.banned ? "已封禁" : "正常"}</td>
                   <td className="py-3 pr-4">
                     <div className="flex flex-wrap gap-2">
                       <form action={switchRoleAction}>
                         <input type="hidden" name="userId" value={user.id} />
                         <input type="hidden" name="role" value={user.role === "OPC" ? "BIZ_OPC" : "OPC"} />
                         <button className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">
-                          Make {user.role === "OPC" ? "BIZ_OPC" : "OPC"}
+                          设为 {user.role === "OPC" ? "商务 OPC" : "OPC"}
                         </button>
                       </form>
                       <form action={toggleBanAction}>
                         <input type="hidden" name="userId" value={user.id} />
                         <button className="focus-ring rounded-md border border-red-300 px-3 py-2 text-xs font-semibold text-red-700 hover:bg-red-50">
-                          {user.banned ? "Unban" : "Ban"}
+                          {user.banned ? "解封" : "封禁"}
                         </button>
                       </form>
                     </div>
@@ -172,8 +172,8 @@ export default async function AdminPage({
         </div>
       </Section>
 
-      <Section title="Order review">
-        {pendingOrders.length === 0 ? <Empty text="No pending orders." /> : null}
+      <Section title="订单审核">
+        {pendingOrders.length === 0 ? <Empty text="暂无待审核订单。" /> : null}
         <div className="grid gap-4">
           {pendingOrders.map((order) => (
             <article key={order.id} className="rounded-lg border border-slate-200 p-4">
@@ -182,7 +182,7 @@ export default async function AdminPage({
                   <h3 className="text-base font-semibold text-slate-950">{order.title}</h3>
                   <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{order.description}</p>
                   <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-500">
-                    <span>{order.author.name ?? order.author.email ?? order.author.phone ?? "Unnamed author"}</span>
+                    <span>{order.author.name ?? order.author.email ?? order.author.phone ?? "未命名发布者"}</span>
                     <span>{order.category}</span>
                     <span>{Number(order.amount).toLocaleString("zh-CN")}</span>
                   </div>
@@ -190,12 +190,12 @@ export default async function AdminPage({
                 <div className="grid w-full gap-2 lg:w-80">
                   <form action={approveOrder}>
                     <input type="hidden" name="orderId" value={order.id} />
-                    <button className="focus-ring h-10 w-full rounded-md bg-emerald-700 text-sm font-semibold text-white hover:bg-emerald-800">Approve</button>
+                    <button className="focus-ring h-10 w-full rounded-md bg-emerald-700 text-sm font-semibold text-white hover:bg-emerald-800">通过</button>
                   </form>
                   <form action={rejectOrder} className="grid gap-2">
                     <input type="hidden" name="orderId" value={order.id} />
-                    <textarea name="rejectReason" rows={2} className="focus-ring resize-none rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-950" placeholder="Reject reason" required />
-                    <button className="focus-ring h-10 rounded-md border border-red-300 text-sm font-semibold text-red-700 hover:bg-red-50">Reject</button>
+                    <textarea name="rejectReason" rows={2} className="focus-ring resize-none rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-950" placeholder="驳回原因" required />
+                    <button className="focus-ring h-10 rounded-md border border-red-300 text-sm font-semibold text-red-700 hover:bg-red-50">驳回</button>
                   </form>
                 </div>
               </div>
@@ -204,13 +204,13 @@ export default async function AdminPage({
         </div>
       </Section>
 
-      <Section title="Report management">
+      <Section title="举报管理">
         <div className="mb-4 flex flex-wrap gap-2 text-sm">
-          <a href="/admin?reports=unresolved" className="font-semibold text-blue-700">Unresolved</a>
-          <a href="/admin?reports=resolved" className="font-semibold text-blue-700">Resolved</a>
-          <a href="/admin?reports=all" className="font-semibold text-blue-700">All</a>
+          <a href="/admin?reports=unresolved" className="font-semibold text-blue-700">未处理</a>
+          <a href="/admin?reports=resolved" className="font-semibold text-blue-700">已处理</a>
+          <a href="/admin?reports=all" className="font-semibold text-blue-700">全部</a>
         </div>
-        {reports.length === 0 ? <Empty text="No reports." /> : null}
+        {reports.length === 0 ? <Empty text="暂无举报。" /> : null}
         <div className="grid gap-3">
           {reports.map((report) => (
             <article key={report.id} className="rounded-lg border border-slate-200 p-4">
@@ -221,19 +221,19 @@ export default async function AdminPage({
                   </p>
                   <p className="mt-2 text-sm leading-6 text-slate-600">{report.reason}</p>
                   <p className="mt-2 text-xs text-slate-500">
-                    Reporter: {report.reporter.name ?? report.reporter.email ?? report.reporter.phone ?? "Unknown"} / {report.resolved ? "Resolved" : "Open"}
+                    举报人：{report.reporter.name ?? report.reporter.email ?? report.reporter.phone ?? "未知"} / {report.resolved ? "已处理" : "未处理"}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {!report.resolved ? (
                     <form action={resolveReportAction}>
                       <input type="hidden" name="reportId" value={report.id} />
-                      <button className="focus-ring rounded-md bg-emerald-700 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-800">Resolve</button>
+                      <button className="focus-ring rounded-md bg-emerald-700 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-800">标记处理</button>
                     </form>
                   ) : null}
                   <form action={deleteReportedContentAction}>
                     <input type="hidden" name="reportId" value={report.id} />
-                    <button className="focus-ring rounded-md border border-red-300 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-50">Delete content</button>
+                    <button className="focus-ring rounded-md border border-red-300 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-50">删除内容</button>
                   </form>
                 </div>
               </div>
@@ -243,7 +243,7 @@ export default async function AdminPage({
       </Section>
 
       <section className="grid gap-5 lg:grid-cols-[1fr_360px]">
-        <Section title="Tool management">
+        <Section title="工具管理">
           <div className="grid gap-3">
             {tools.map((tool) => (
               <div key={tool.id} className="rounded-lg border border-slate-200 p-4">
@@ -251,24 +251,24 @@ export default async function AdminPage({
                   <div>
                     <p className="font-semibold text-slate-950">{tool.name}</p>
                     <p className="text-sm text-slate-500">
-                      {tool.category} / order {tool.order} / {tool.active ? "Active" : "Inactive"}
+                      {tool.category} / 排序 {tool.order} / {tool.active ? "已启用" : "已停用"}
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <form action={moveToolAction}>
                       <input type="hidden" name="toolId" value={tool.id} />
                       <input type="hidden" name="direction" value="up" />
-                      <button className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Up</button>
+                      <button className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">上移</button>
                     </form>
                     <form action={moveToolAction}>
                       <input type="hidden" name="toolId" value={tool.id} />
                       <input type="hidden" name="direction" value="down" />
-                      <button className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Down</button>
+                      <button className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">下移</button>
                     </form>
                     <form action={toggleToolAction}>
                       <input type="hidden" name="toolId" value={tool.id} />
                       <button className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">
-                        {tool.active ? "Deactivate" : "Activate"}
+                        {tool.active ? "停用" : "启用"}
                       </button>
                     </form>
                   </div>
@@ -282,15 +282,15 @@ export default async function AdminPage({
       </section>
 
       <section className="grid gap-5 lg:grid-cols-[1fr_360px]">
-        <Section title="Backend accounts">
+        <Section title="后台账号">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] text-left text-sm">
               <thead className="border-b border-slate-200 text-slate-500">
                 <tr>
-                  <th className="py-3 pr-4 font-medium">Name</th>
-                  <th className="py-3 pr-4 font-medium">Email</th>
-                  <th className="py-3 pr-4 font-medium">Role</th>
-                  <th className="py-3 pr-4 font-medium">Permissions</th>
+                  <th className="py-3 pr-4 font-medium">名称</th>
+                  <th className="py-3 pr-4 font-medium">邮箱</th>
+                  <th className="py-3 pr-4 font-medium">角色</th>
+                  <th className="py-3 pr-4 font-medium">权限</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -299,7 +299,7 @@ export default async function AdminPage({
                     <td className="py-3 pr-4 font-medium text-slate-950">{admin.name}</td>
                     <td className="py-3 pr-4 text-slate-600">{admin.email}</td>
                     <td className="py-3 pr-4 text-slate-600">{admin.role}</td>
-                    <td className="py-3 pr-4 text-slate-600">{admin.role === "ADMIN" ? "All" : JSON.stringify(admin.subAccount?.permissions ?? {})}</td>
+                    <td className="py-3 pr-4 text-slate-600">{admin.role === "ADMIN" ? "全部" : JSON.stringify(admin.subAccount?.permissions ?? {})}</td>
                   </tr>
                 ))}
               </tbody>
@@ -311,8 +311,8 @@ export default async function AdminPage({
           <CreateSubAdminForm action={createSubAdmin} />
         ) : (
           <div className="rounded-lg border border-slate-200 bg-white p-5">
-            <h2 className="text-lg font-semibold text-slate-950">Sub-admin creation</h2>
-            <p className="mt-3 text-sm leading-6 text-slate-600">Only primary admins can create backend sub-accounts.</p>
+            <h2 className="text-lg font-semibold text-slate-950">创建后台子账号</h2>
+            <p className="mt-3 text-sm leading-6 text-slate-600">只有主管理员可以创建后台子账号。</p>
           </div>
         )}
       </section>
@@ -346,18 +346,18 @@ function Empty({ text }: { text: string }) {
 function ToolCreateForm({ action }: { action: (formData: FormData) => Promise<void> }) {
   return (
     <form action={action} className="grid gap-3 rounded-lg border border-slate-200 bg-white p-5">
-      <h2 className="text-lg font-semibold text-slate-950">Create tool</h2>
-      <input name="name" placeholder="Name" className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-sm" required />
-      <textarea name="description" placeholder="Description" className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-sm" required />
-      <input name="category" placeholder="Category" className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-sm" required />
+      <h2 className="text-lg font-semibold text-slate-950">创建工具</h2>
+      <input name="name" placeholder="名称" className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-sm" required />
+      <textarea name="description" placeholder="描述" className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-sm" required />
+      <input name="category" placeholder="分类" className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-sm" required />
       <input name="url" type="url" placeholder="https://example.com" className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-sm" required />
-      <input name="iconUrl" type="url" placeholder="Icon URL" className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-sm" />
+      <input name="iconUrl" type="url" placeholder="图标 URL" className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-sm" />
       <input name="order" type="number" defaultValue={0} className="focus-ring rounded-md border border-slate-300 px-3 py-2 text-sm" />
       <label className="inline-flex items-center gap-2 text-sm text-slate-700">
         <input type="checkbox" name="embedable" />
-        Embedable
+        可嵌入
       </label>
-      <button className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">Create</button>
+      <button className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">创建</button>
     </form>
   );
 }

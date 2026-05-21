@@ -32,7 +32,7 @@ export default function ScreenPage() {
       <div className="mx-auto flex min-h-screen w-full max-w-[1600px] flex-col justify-between px-5 py-6 md:px-10 md:py-8">
         <header className="flex flex-col gap-2 border-b border-cyan-300/20 pb-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm font-semibold tracking-[0.35em] text-cyan-300">OPC HUB DATA CENTER</p>
+            <p className="text-sm font-semibold tracking-[0.35em] text-cyan-300">OPC HUB 数据中心</p>
             <h1 className="mt-2 text-3xl font-semibold md:text-5xl">平台实时运营大屏</h1>
           </div>
           <div className="text-sm text-cyan-100/70">每 10 秒自动刷新</div>

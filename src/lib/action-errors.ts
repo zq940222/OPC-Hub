@@ -1,0 +1,36 @@
+const actionErrorLabels: Record<string, string> = {
+  login_required: "请先登录。",
+  biz_opc_required: "只有商务 OPC 可以发布订单。",
+  title_required: "请填写标题。",
+  description_required: "请填写描述。",
+  category_required: "请填写类目。",
+  valid_amount_required: "请填写有效金额。",
+  order_not_found: "订单不存在。",
+  order_forbidden: "你没有权限操作该订单。",
+  order_not_editable: "该订单当前不可编辑。",
+  order_not_closeable: "该订单当前不可关闭。",
+  order_not_in_progress: "只有进行中的订单可以完成。",
+  accepted_application_required: "请先接受一个报名后再完成订单。",
+  reason_required: "请填写原因。",
+  reason_too_long: "原因不能超过 300 字。",
+  own_order: "不能报名自己发布的订单。",
+  order_not_recruiting: "该订单当前不在招募中。",
+  duplicate_application: "你已经报名过该订单。",
+  application_not_found: "报名记录不存在。",
+  application_forbidden: "你没有权限处理该报名。",
+  application_already_handled: "该报名已处理。",
+  content_required: "请填写内容。",
+  board_not_found: "板块不存在。",
+  post_not_found: "帖子不存在。",
+  title_too_long: "标题不能超过 80 字。",
+  invalid_target_type: "举报对象类型无效。",
+  admin_required: "需要管理员权限。",
+  bio_too_long: "简介不能超过 300 字。",
+  invalid_website: "请输入有效的网站地址。",
+  self_message_forbidden: "不能给自己发送私信。",
+  user_not_found: "用户不存在。",
+};
+
+export function formatActionError(error: string) {
+  return actionErrorLabels[error] ?? error;
+}

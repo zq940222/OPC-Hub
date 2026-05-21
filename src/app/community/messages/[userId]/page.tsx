@@ -34,7 +34,7 @@ export default async function MessageDetailPage(props: { params: Promise<{ userI
   return (
     <main className="shell grid gap-6 py-8 md:py-12">
       <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:p-8">
-        <p className="text-sm font-semibold text-teal-700">Conversation</p>
+        <p className="text-sm font-semibold text-teal-700">对话</p>
         <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">{otherUser.name ?? otherUser.email ?? "OPC"}</h1>
       </section>
       <MessageThread

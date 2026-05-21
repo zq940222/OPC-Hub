@@ -15,7 +15,7 @@ export type AdminSession = {
 
 function getSecret() {
   const secret = process.env.NEXTAUTH_SECRET;
-  if (!secret) throw new Error("NEXTAUTH_SECRET is required for admin sessions.");
+  if (!secret) throw new Error("后台会话需要配置 NEXTAUTH_SECRET。");
   return secret;
 }
 

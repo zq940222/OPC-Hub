@@ -9,14 +9,14 @@ import { useState } from "react";
 import { UserMenu } from "@/components/layout/UserMenu";
 
 const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/tools", label: "Tools" },
-  { href: "/finance", label: "Finance" },
-  { href: "/legal", label: "Legal" },
-  { href: "/banking", label: "Banking" },
-  { href: "/equipment", label: "Equipment" },
-  { href: "/orders", label: "Orders" },
-  { href: "/community", label: "Community" },
+  { href: "/", label: "首页" },
+  { href: "/tools", label: "工具" },
+  { href: "/finance", label: "财务" },
+  { href: "/legal", label: "法务" },
+  { href: "/banking", label: "银行" },
+  { href: "/equipment", label: "设备" },
+  { href: "/orders", label: "订单" },
+  { href: "/community", label: "社区" },
 ];
 
 export function AppChrome({
@@ -42,7 +42,7 @@ export function AppChrome({
             <span className="text-base font-semibold">OPC Hub</span>
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Main navigation">
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="主导航">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -62,7 +62,7 @@ export function AppChrome({
             ) : (
               <Link href="/login" className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">
                 <LogIn aria-hidden="true" className="mr-1 inline" size={16} />
-                Login
+                登录
               </Link>
             )}
           </div>
@@ -71,7 +71,7 @@ export function AppChrome({
             type="button"
             className="focus-ring rounded-md border border-slate-300 p-2 text-slate-700 lg:hidden"
             onClick={() => setOpen((value) => !value)}
-            aria-label={open ? "Close navigation" : "Open navigation"}
+            aria-label={open ? "关闭导航" : "打开导航"}
             aria-expanded={open}
           >
             {open ? <X size={20} /> : <Menu size={20} />}
@@ -80,7 +80,7 @@ export function AppChrome({
 
         {open && (
           <div className="border-t border-slate-200 bg-white lg:hidden">
-            <nav className="shell grid gap-1 py-3" aria-label="Mobile navigation">
+            <nav className="shell grid gap-1 py-3" aria-label="移动端导航">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
@@ -96,25 +96,25 @@ export function AppChrome({
               {user ? (
                 <>
                   <Link href={`/profile/${user.id}`} onClick={() => setOpen(false)} className="rounded-md px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">
-                    My profile
+                    我的主页
                   </Link>
                   <Link href="/dashboard/orders" onClick={() => setOpen(false)} className="rounded-md px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">
-                    My orders
+                    我的订单
                   </Link>
                   <Link href="/settings/profile" onClick={() => setOpen(false)} className="rounded-md px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">
-                    Account settings
+                    账号设置
                   </Link>
                   <button
                     type="button"
                     onClick={() => signOut({ callbackUrl: "/" })}
                     className="mt-2 rounded-md border border-slate-300 px-3 py-3 text-left text-sm font-medium text-slate-700"
                   >
-                    Sign out
+                    退出登录
                   </button>
                 </>
               ) : (
                 <Link href="/login" onClick={() => setOpen(false)} className="mt-2 rounded-md bg-blue-700 px-3 py-3 text-sm font-semibold text-white">
-                  Login
+                  登录
                 </Link>
               )}
             </nav>
@@ -126,9 +126,9 @@ export function AppChrome({
 
       <footer className="border-t border-slate-200 bg-white">
         <div className="shell flex flex-col gap-2 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
-          <span>OPC Hub - services, orders, and community collaboration</span>
+          <span>OPC Hub - 服务、订单与社区协作平台</span>
           <Link href="/screen" className="font-medium text-blue-700 hover:text-blue-900">
-            Display screen
+            数据大屏
           </Link>
         </div>
       </footer>

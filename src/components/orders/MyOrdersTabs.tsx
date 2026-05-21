@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { formatAmount } from "@/components/orders/OrderCard";
+import { formatAmount, formatOrderStatus } from "@/components/orders/OrderCard";
+
+const applicationStatusLabels: Record<string, string> = {
+  PENDING: "待处理",
+  ACCEPTED: "已接受",
+  REJECTED: "已拒绝",
+};
 
 type MyOrdersTabsProps = {
   authoredOrders: Array<{
@@ -28,10 +34,10 @@ export function MyOrdersTabs({ authoredOrders, applications }: MyOrdersTabsProps
     <section className="grid gap-4">
       <div className="flex flex-wrap gap-2">
         <button type="button" onClick={() => setTab("authored")} className={`focus-ring rounded-md px-4 py-2 text-sm font-semibold ${tab === "authored" ? activeClass : idleClass}`}>
-          Published
+          我发布的
         </button>
         <button type="button" onClick={() => setTab("applied")} className={`focus-ring rounded-md px-4 py-2 text-sm font-semibold ${tab === "applied" ? activeClass : idleClass}`}>
-          Applied
+          我报名的
         </button>
       </div>
 
@@ -45,16 +51,16 @@ export function MyOrdersTabs({ authoredOrders, applications }: MyOrdersTabsProps
                     {order.title}
                   </Link>
                   <p className="mt-1 text-sm text-slate-500">
-                    {order.status} / {order._count.applications} applications / {formatAmount(order.amount)}
+                    {formatOrderStatus(order.status)} / {order._count.applications} 人报名 / {formatAmount(order.amount)}
                   </p>
                 </div>
                 <Link href={`/orders/${order.id}/edit`} className="text-sm font-semibold text-blue-700 hover:text-blue-900">
-                  Edit
+                  编辑
                 </Link>
               </div>
             </div>
           ))}
-          {authoredOrders.length === 0 ? <p className="rounded-lg border border-dashed border-slate-300 p-5 text-sm text-slate-500">No published orders.</p> : null}
+          {authoredOrders.length === 0 ? <p className="rounded-lg border border-dashed border-slate-300 p-5 text-sm text-slate-500">暂无发布的订单。</p> : null}
         </div>
       ) : (
         <div className="grid gap-3">
@@ -64,11 +70,11 @@ export function MyOrdersTabs({ authoredOrders, applications }: MyOrdersTabsProps
                 {application.order.title}
               </Link>
               <p className="mt-1 text-sm text-slate-500">
-                application {application.status} / order {application.order.status} / {formatAmount(application.order.amount)}
+                报名状态 {applicationStatusLabels[application.status] ?? application.status} / 订单状态 {formatOrderStatus(application.order.status)} / {formatAmount(application.order.amount)}
               </p>
             </div>
           ))}
-          {applications.length === 0 ? <p className="rounded-lg border border-dashed border-slate-300 p-5 text-sm text-slate-500">No applications.</p> : null}
+          {applications.length === 0 ? <p className="rounded-lg border border-dashed border-slate-300 p-5 text-sm text-slate-500">暂无报名记录。</p> : null}
         </div>
       )}
     </section>

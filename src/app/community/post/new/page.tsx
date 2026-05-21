@@ -22,8 +22,8 @@ export default async function NewPostPage({
   return (
     <main className="shell grid gap-6 py-8 md:py-12">
       <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:p-8">
-        <p className="text-sm font-semibold text-teal-700">New post</p>
-        <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">Publish to the community</h1>
+        <p className="text-sm font-semibold text-teal-700">新帖子</p>
+        <h1 className="mt-3 text-3xl font-semibold text-slate-950 md:text-5xl">发布到社区</h1>
       </section>
       <PostForm boards={boards} defaultBoardId={defaultBoard?.id} />
     </main>

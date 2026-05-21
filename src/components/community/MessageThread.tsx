@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import type { MessageState } from "@/actions/messages";
+import { formatActionError } from "@/lib/action-errors";
 
 type ThreadMessage = {
   id: string;
@@ -47,13 +48,13 @@ export function MessageThread({ currentUserId, initialMessages, action, apiPath 
             </div>
           );
         })}
-        {messages.length === 0 ? <p className="text-sm text-slate-500">No messages yet.</p> : null}
+        {messages.length === 0 ? <p className="text-sm text-slate-500">暂无私信。</p> : null}
       </div>
       <form action={formAction} className="grid gap-3 rounded-lg border border-slate-200 bg-white p-4">
-        {state.error ? <p className="text-sm text-red-700">{state.error}</p> : null}
+        {state.error ? <p className="text-sm text-red-700">{formatActionError(state.error)}</p> : null}
         <textarea name="content" required rows={3} className="focus-ring resize-y rounded-md border border-slate-300 px-3 py-2 text-sm" />
         <button disabled={pending} className="focus-ring rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-60">
-          {pending ? "Sending..." : "Send"}
+          {pending ? "发送中..." : "发送"}
         </button>
       </form>
     </section>

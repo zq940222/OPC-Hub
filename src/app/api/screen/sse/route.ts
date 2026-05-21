@@ -11,7 +11,7 @@ async function fetchStats() {
     orderCount,
     orderAmount: Number(orderAmount._sum.amount ?? 0),
     companyCount,
-    events: ["New order entered review", "OPC company submitted application", "Finance provider updated schedule"],
+    events: ["新订单进入审核", "OPC 企业提交报名", "财务服务商更新排期"],
   };
 }
 

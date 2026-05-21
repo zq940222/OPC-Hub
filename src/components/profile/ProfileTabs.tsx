@@ -20,16 +20,16 @@ export function ProfileTabs({ completedOrders, posts, followers, following }: Pr
     <section className="grid gap-4">
       <div className="flex flex-wrap gap-2">
         <button type="button" onClick={() => setTab("orders")} className={buttonClass("orders")}>
-          Completed orders
+          已完成订单
         </button>
         <button type="button" onClick={() => setTab("posts")} className={buttonClass("posts")}>
-          Posts
+          帖子
         </button>
         <button type="button" onClick={() => setTab("followers")} className={buttonClass("followers")}>
-          Followers
+          粉丝
         </button>
         <button type="button" onClick={() => setTab("following")} className={buttonClass("following")}>
-          Following
+          关注
         </button>
       </div>
 
@@ -43,7 +43,7 @@ export function ProfileTabs({ completedOrders, posts, followers, following }: Pr
               </p>
             </Link>
           ))}
-          {completedOrders.length === 0 ? <EmptyState text="No completed orders yet." /> : null}
+          {completedOrders.length === 0 ? <EmptyState text="暂无已完成订单。" /> : null}
         </div>
       ) : null}
 
@@ -57,16 +57,16 @@ export function ProfileTabs({ completedOrders, posts, followers, following }: Pr
               </p>
             </Link>
           ))}
-          {posts.length === 0 ? <EmptyState text="No posts yet." /> : null}
+          {posts.length === 0 ? <EmptyState text="暂无帖子。" /> : null}
         </div>
       ) : null}
 
       {tab === "followers" ? (
-        <PeopleList people={followers.map((item) => item.follower)} emptyText="No followers yet." />
+        <PeopleList people={followers.map((item) => item.follower)} emptyText="暂无粉丝。" />
       ) : null}
 
       {tab === "following" ? (
-        <PeopleList people={following.map((item) => item.following)} emptyText="Not following anyone yet." />
+        <PeopleList people={following.map((item) => item.following)} emptyText="暂未关注任何人。" />
       ) : null}
     </section>
   );

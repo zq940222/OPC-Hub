@@ -11,7 +11,7 @@ type ToolGridProps = {
 
 export function ToolGrid({ tools }: ToolGridProps) {
   if (tools.length === 0) {
-    return <p className="rounded-lg border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-500">No active tools in this category.</p>;
+    return <p className="rounded-lg border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-500">该分类暂无启用工具。</p>;
   }
 
   return (
@@ -29,7 +29,7 @@ export function ToolGrid({ tools }: ToolGridProps) {
           </div>
           <p className="mt-4 text-sm leading-6 text-slate-600">{tool.description}</p>
           <a href={tool.url} target="_blank" rel="noreferrer" className="focus-ring mt-5 inline-flex rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">
-            Use now
+            立即使用
           </a>
         </article>
       ))}

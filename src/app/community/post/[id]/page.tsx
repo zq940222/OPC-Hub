@@ -63,15 +63,15 @@ export default async function PostDetailPage(props: { params: Promise<{ id: stri
             <Link href={`/community/${post.board.slug}`} className="rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
               {post.board.name}
             </Link>
-            {post.isPinned ? <span className="rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700">Pinned</span> : null}
-            {post.isFeatured ? <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700">Featured</span> : null}
+            {post.isPinned ? <span className="rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700">置顶</span> : null}
+            {post.isFeatured ? <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700">精选</span> : null}
           </div>
           <h1 className="mt-4 text-3xl font-semibold text-slate-950 md:text-5xl">{post.title}</h1>
           <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-500">
             <Link href={`/profile/${post.author.id}`} className="font-medium text-blue-700 hover:text-blue-900">
               {post.author.name ?? post.author.email ?? "OPC"}
             </Link>
-            <span>{post.viewCount + 1} views</span>
+            <span>{post.viewCount + 1} 次浏览</span>
             <span>{post.createdAt.toLocaleDateString("zh-CN")}</span>
           </div>
           <p className="mt-6 whitespace-pre-wrap text-base leading-8 text-slate-700">{post.content}</p>
@@ -82,7 +82,7 @@ export default async function PostDetailPage(props: { params: Promise<{ id: stri
         </article>
 
         <section className="grid gap-4">
-          <h2 className="text-xl font-semibold text-slate-950">Comments</h2>
+          <h2 className="text-xl font-semibold text-slate-950">评论</h2>
           {post.comments.map((comment) => (
             <article key={comment.id} className="rounded-lg border border-slate-200 bg-white p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -103,29 +103,29 @@ export default async function PostDetailPage(props: { params: Promise<{ id: stri
 
       <aside className="grid content-start gap-4">
         <section className="rounded-lg border border-slate-200 bg-white p-5">
-          <h2 className="text-lg font-semibold text-slate-950">Author</h2>
+          <h2 className="text-lg font-semibold text-slate-950">作者</h2>
           <Link href={`/profile/${post.author.id}`} className="mt-3 block font-semibold text-blue-700 hover:text-blue-900">
             {post.author.name ?? post.author.email ?? "OPC"}
           </Link>
-          <p className="mt-2 text-sm text-slate-500">{post.author.points} points</p>
+          <p className="mt-2 text-sm text-slate-500">{post.author.points} 积分</p>
           {post.author.id !== session.user.id ? (
             <Link href={`/community/messages/${post.author.id}`} className="mt-4 inline-flex rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
-              Message
+              私信
             </Link>
           ) : null}
         </section>
 
         {isAdmin ? (
           <section className="grid gap-2 rounded-lg border border-slate-200 bg-white p-5">
-            <h2 className="text-lg font-semibold text-slate-950">Admin</h2>
+            <h2 className="text-lg font-semibold text-slate-950">管理员</h2>
             <form action={pinAction}>
-              <button className="focus-ring w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Toggle pinned</button>
+              <button className="focus-ring w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">切换置顶</button>
             </form>
             <form action={featureAction}>
-              <button className="focus-ring w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Toggle featured</button>
+              <button className="focus-ring w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">切换精选</button>
             </form>
             <form action={deleteAction}>
-              <button className="focus-ring w-full rounded-md border border-red-300 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-50">Delete post</button>
+              <button className="focus-ring w-full rounded-md border border-red-300 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-50">删除帖子</button>
             </form>
           </section>
         ) : null}
