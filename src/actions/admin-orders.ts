@@ -1,15 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getAdminSession } from "@/lib/admin-session";
 import { db } from "@/lib/db";
+import { requireAdminPermission } from "@/actions/admin-shared";
 
 async function requireAdminReviewer() {
-  const session = await getAdminSession();
-  if (!session || (session.role !== "ADMIN" && session.role !== "SUB_ADMIN")) {
+  const auth = await requireAdminPermission("orders");
+  if ("error" in auth) {
     throw new Error("Unauthorized");
   }
-  return session;
+  return auth.admin;
 }
 
 export async function approveOrder(formData: FormData) {

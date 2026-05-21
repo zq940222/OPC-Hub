@@ -92,7 +92,11 @@ export async function createSubAdmin(
         create: {
           createdById: session.id,
           permissions: {
-            modules: ["users", "orders", "content"],
+            users: true,
+            orders: true,
+            content: true,
+            tools: false,
+            announcements: false,
           },
         },
       },

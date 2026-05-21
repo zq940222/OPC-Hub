@@ -20,6 +20,7 @@ function hasAdminSession(req: NextRequest) {
 export default auth((req) => {
   const { pathname } = req.nextUrl;
   const role = req.auth?.user?.role;
+  const banned = req.auth?.user?.banned === true;
 
   if (pathname.startsWith("/admin/login")) {
     return NextResponse.next();
@@ -27,6 +28,10 @@ export default auth((req) => {
 
   if (pathname.startsWith("/admin") && !hasAdminSession(req)) {
     return NextResponse.redirect(new URL("/admin/login", req.url));
+  }
+
+  if (banned && !pathname.startsWith("/login")) {
+    return NextResponse.redirect(new URL("/login?error=banned", req.url));
   }
 
   if (pathname.startsWith("/orders/new") && role !== "BIZ_OPC") {

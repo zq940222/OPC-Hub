@@ -35,6 +35,7 @@ const providers: Provider[] = [
         name: user.name,
         image: user.image,
         role: user.role,
+        banned: user.banned,
       };
     },
   }),
@@ -74,6 +75,7 @@ const providers: Provider[] = [
         name: user.name,
         image: user.image,
         role: user.role,
+        banned: user.banned,
       };
     },
   }),
@@ -100,6 +102,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.banned = user.banned === true;
       }
       return token;
     },
@@ -107,6 +110,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = typeof token.id === "string" ? token.id : "";
         session.user.role = token.role === "BIZ_OPC" || token.role === "OPC" ? token.role : "OPC";
+        session.user.banned = token.banned === true;
       }
       return session;
     },
