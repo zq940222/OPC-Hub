@@ -3,7 +3,7 @@
 import type { Session } from "next-auth";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { ChevronDown, LogOut, Settings, UserRound, ClipboardList } from "lucide-react";
+import { ChevronDown, LogOut, Settings, UserRound, ClipboardList, MessageCircle } from "lucide-react";
 import { useState } from "react";
 
 type UserMenuProps = {
@@ -33,6 +33,9 @@ export function UserMenu({ user }: UserMenuProps) {
           </MenuLink>
           <MenuLink href="/dashboard/orders" icon={<ClipboardList size={16} />}>
             My orders
+          </MenuLink>
+          <MenuLink href="/community/messages" icon={<MessageCircle size={16} />}>
+            Messages
           </MenuLink>
           <MenuLink href="/settings/profile" icon={<Settings size={16} />}>
             Account settings
