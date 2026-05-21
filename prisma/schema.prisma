@@ -37,20 +37,24 @@ model User {
   image         String?
   role          Role      @default(OPC)
   points        Int       @default(0)
+  banned        Boolean   @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts           Account[]
-  sessions           Session[]
-  orders             Order[]
-  applications       OrderApplication[]
-  posts              Post[]
-  comments           Comment[]
-  sentMessages       Message[]         @relation("SentMessages")
-  receivedMessages   Message[]         @relation("ReceivedMessages")
-  pointLogs          PointLog[]
-  following          Follow[]          @relation("Following")
-  followers          Follow[]          @relation("Followers")
+  accounts         Account[]
+  sessions         Session[]
+  orders           Order[]
+  applications     OrderApplication[]
+  posts            Post[]
+  comments         Comment[]
+  sentMessages     Message[]          @relation("SentMessages")
+  receivedMessages Message[]          @relation("ReceivedMessages")
+  pointLogs        PointLog[]
+  following        Follow[]           @relation("Following")
+  followers        Follow[]           @relation("Followers")
+  opcProfile       OpcProfile?
+  postLikes        PostLike[]
+  reports          Report[]           @relation("ReporterReports")
 }
 
 enum AdminRole {
@@ -123,6 +127,7 @@ model Order {
   description  String      @db.Text
   amount       Decimal     @db.Decimal(12, 2)
   category     String
+  tags         String[]
   status       OrderStatus @default(DRAFT)
   deadline     DateTime?
   authorId     String
@@ -132,6 +137,22 @@ model Order {
 
   author       User               @relation(fields: [authorId], references: [id])
   applications OrderApplication[]
+
+  @@index([status, createdAt])
+  @@index([category])
+}
+
+model OpcProfile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  bio       String?  @db.Text
+  skills    String[]
+  website   String?
+  location  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model OrderApplication {
@@ -156,6 +177,22 @@ model Board {
   posts Post[]
 }
 
+model Tool {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  category    String
+  url         String
+  iconUrl     String?
+  embedable   Boolean  @default(false)
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category, active, order])
+}
+
 model Post {
   id         String   @id @default(cuid())
   title      String
@@ -172,6 +209,35 @@ model Post {
   board    Board     @relation(fields: [boardId], references: [id])
   author   User      @relation(fields: [authorId], references: [id])
   comments Comment[]
+  likes    PostLike[]
+
+  @@index([boardId, isPinned, createdAt])
+}
+
+model PostLike {
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
+}
+
+model Report {
+  id         String   @id @default(cuid())
+  reporterId String
+  targetType String
+  targetId   String
+  reason     String
+  resolved   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  reporter User @relation("ReporterReports", fields: [reporterId], references: [id])
+
+  @@index([resolved, createdAt])
+  @@index([targetType, targetId])
 }
 
 model Comment {
