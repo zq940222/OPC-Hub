@@ -1,11 +1,21 @@
-import { ModulePage } from "@/components/layout/ModulePage";
+import { Banknote, CreditCard, Landmark, WalletCards } from "lucide-react";
+import { ServicePage } from "@/components/services/ServicePage";
 
 export default function BankingPage() {
   return (
-    <ModulePage
-      eyebrow="银行服务"
-      title="开户、结算与授信对接"
-      description="聚合银行开户、经营结算、授信咨询与资金管理服务，帮助企业更快完成金融准备。"
+    <ServicePage
+      eyebrow="Banking service"
+      title="OPC account opening, credit, settlement, and treasury matching"
+      intro={[
+        "Banking service coordination for OPC businesses that need account setup and financial product introductions.",
+        "Offerings are partner-dependent and should be confirmed through the configured contact channel.",
+      ]}
+      features={[
+        { icon: <Landmark size={20} />, title: "OPC account opening", description: "Partner bank account opening coordination and prerequisite document checks." },
+        { icon: <CreditCard size={20} />, title: "Credit loans", description: "Initial matching for business credit products based on operating profile." },
+        { icon: <Banknote size={20} />, title: "Payment settlement", description: "Collection, settlement, and reconciliation workflow consultation." },
+        { icon: <WalletCards size={20} />, title: "Treasury allocation", description: "Basic cash management and wealth product matching for idle operating funds." },
+      ]}
     />
   );
 }
