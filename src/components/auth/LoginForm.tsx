@@ -108,7 +108,7 @@ export function LoginForm() {
                 </button>
               </div>
             </label>
-            {devCode && <p className="rounded-md bg-teal-50 px-3 py-2 text-sm text-teal-800">开发环境验证码：{devCode}</p>}
+            {devCode && <p className="rounded-md bg-teal-50 px-3 py-2 text-sm text-teal-800">临时验证码：{devCode}，请填写此验证码。</p>}
           </>
         ) : (
           <>

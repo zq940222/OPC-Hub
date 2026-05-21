@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { generateSmsCode, isValidPhone, sendSmsCode } from "@/lib/sms";
+import { generateSmsCode, isValidPhone } from "@/lib/sms";
+
+export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   const { phone } = (await req.json()) as { phone?: string };
@@ -18,12 +20,8 @@ export async function POST(req: Request) {
     },
   });
 
-  if (process.env.TENCENT_SECRET_ID && process.env.TENCENT_SECRET_KEY) {
-    await sendSmsCode(phone, code);
-  }
-
   return NextResponse.json({
     success: true,
-    devCode: process.env.NODE_ENV === "development" ? code : undefined,
+    devCode: code,
   });
 }
